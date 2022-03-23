@@ -10,4 +10,4 @@ public class ShinhanDataApplication {
         SpringApplication.run(ShinhanDataApplication.class, args);
     }
 
-}f
+}
