@@ -23,7 +23,7 @@ public class EchoServerHandler extends ChannelInboundHandlerAdapter {
         String[] a = LocalDateTime.now().toString().split("T");
         a[0] = a[0].replace("-", ".");
         a[1] = a[1].substring(0,5);
-        String query = "insert into shinhandata ( idx, rec_data, reg_dt) values ( IDX_SHINHANDATA_SEQ.NEXTVAL, " + message + "," + a[0] + " " + a[1] + ")";
+        String query = "insert into shinhandata ( idx, rec_data, reg_dt) values ( IDX_SHINHANDATA_SEQ.NEXTVAL, ?,TO_DATE(?, YYYY.MM.DD hh:mm))";
 //        String[] dataArr = message.split("\\|");
 //        for(int a = 1; a < dataArr.length - 1; a++){
 //            String[] dataObject = dataArr[a].split("=");
@@ -39,6 +39,9 @@ public class EchoServerHandler extends ChannelInboundHandlerAdapter {
         try{
             conn = DbConnection.getConnection();
             pstm = conn.prepareStatement(query);
+            pstm.setString(1, message);
+            pstm.setString(2, a[0] + " " + a[1]);
+
             int result = pstm.executeUpdate();
             channel.writeAndFlush("데이터 입력이 완료되었습니다. 해당 데이터의 번호는 " + result + " 입니다." + "\n");
         } catch (SQLException e) {
