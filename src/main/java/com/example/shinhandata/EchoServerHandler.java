@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 public class EchoServerHandler extends ChannelInboundHandlerAdapter {
     Connection conn = null;
@@ -19,17 +20,19 @@ public class EchoServerHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext context, Object msg){
         String message = (String)msg;
         Channel channel = context.channel();
-        String query = "insert into shinhandata ( idx,";
-        String values = ") values ( SHINHANDATA_SEQ.NEXTVAL";
-        String[] dataArr = message.split("\\|");
-        for(int a = 1; a < dataArr.length - 1; a++){
-            String[] dataObject = dataArr[a].split("=");
-            if(dataObject.length == 2){
-                query += dataObject[0] + ",";
-                values += dataObject[1] + ",";
-            }
-        }
-        query = query.substring(0, query.length()-1) + values.substring(0,values.length()-1) + ")";
+        String[] a = LocalDateTime.now().toString().split("T");
+        a[0] = a[0].replace("-", ".");
+        a[1] = a[1].substring(0,5);
+        String query = "insert into shinhandata ( idx, rec_data, reg_dt) values ( IDX_SHINHANDATA_SEQ.NEXTVAL, " + message + "," + a[0] + " " + a[1] + ")";
+//        String[] dataArr = message.split("\\|");
+//        for(int a = 1; a < dataArr.length - 1; a++){
+//            String[] dataObject = dataArr[a].split("=");
+//            if(dataObject.length == 2){
+//                query += dataObject[0] + ",";
+//                values += dataObject[1] + ",";
+//            }
+//        }
+//        query = query.substring(0, query.length()-1) + values.substring(0,values.length()-1) + ")";
 
         System.out.println(query);
 

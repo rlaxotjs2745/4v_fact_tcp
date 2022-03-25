@@ -15,6 +15,7 @@ import io.netty.util.concurrent.DefaultThreadFactory;
 import io.netty.util.concurrent.GlobalEventExecutor;
 
 import java.net.InetSocketAddress;
+import java.time.LocalDateTime;
 
 
 @SpringBootApplication
@@ -60,6 +61,10 @@ public class ShinhanDataApplication {
     }
 
     public static void main(String[] args) throws Exception {
+        String[] a = LocalDateTime.now().toString().split("T");
+        a[0] = a[0].replace("-", ".");
+        a[1] = a[1].substring(0,5);
+        System.out.println(a[0] + " " + a[1]);
         new ShinhanDataApplication().startServer();
     }
 
