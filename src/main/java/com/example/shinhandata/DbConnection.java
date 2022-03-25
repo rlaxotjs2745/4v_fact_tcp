@@ -10,9 +10,9 @@ public class DbConnection {
     public static Connection getConnection() {
         Connection connect = null;
         try{
-            String user = "root";
-            String pw = "1234";
-            String url = "jdbc:oracle:thin:@14.63.174.153:1521:xe";
+            String user = "c##fact_usr";
+            String pw = "pass";
+            String url = "jdbc:oracle:thin:@192.168.0.97:1521:orcl";
 
             Class.forName("oracle.jdbc.driver.OracleDriver");
             connect = DriverManager.getConnection(url, user, pw);
