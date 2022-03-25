@@ -21,6 +21,6 @@ public class DbConnection {
         } catch (SQLException e){
             System.out.println("DB 연결 실패 : " + e.toString());
         }
-        return connection;
+        return connect;
     }
 }
