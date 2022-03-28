@@ -8,6 +8,7 @@
         <version>2.6.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
+    <packaging>war</packaging>
     <groupId>com.example</groupId>
     <artifactId>shinhanData</artifactId>
     <version>0.0.1-SNAPSHOT</version>
@@ -55,12 +56,6 @@
             <artifactId>netty-all</artifactId>
             <version>4.1.60.Final</version>
             <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.oracle.database.jdbc</groupId>
-            <artifactId>ojdbc11</artifactId>
-            <version>21.5.0.0</version>
         </dependency>
 
 
