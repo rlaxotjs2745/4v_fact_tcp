@@ -61,10 +61,8 @@ public class ShinhanDataApplication {
     }
 
     public static void main(String[] args) throws Exception {
-        String[] a = LocalDateTime.now().toString().split("T");
-        a[0] = a[0].replace("-", ".");
-        a[1] = a[1].substring(0,5);
-        System.out.println(a[0] + " " + a[1]);
+        System.out.println("a\nb".replaceAll("\n",""));
+
         new ShinhanDataApplication().startServer();
     }
 
