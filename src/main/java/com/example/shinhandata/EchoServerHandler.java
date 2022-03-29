@@ -43,7 +43,6 @@ public class EchoServerHandler extends ChannelInboundHandlerAdapter {
 //            }
 //        }
 //        query = query.substring(0, query.length()-1) + values.substring(0,values.length()-1) + ")";
-
         System.out.println(query);
         if(splitBool){
             String[] messageArr = message.split("₩");
