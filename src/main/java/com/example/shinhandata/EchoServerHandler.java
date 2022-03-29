@@ -30,10 +30,8 @@ public class EchoServerHandler extends ChannelInboundHandlerAdapter {
         }
 
         Channel channel = context.channel();
-        String[] a = LocalDateTime.now().toString().split("T");
-        a[0] = a[0].replace("-", ".");
-        a[1] = a[1].substring(0,5);
-        String query = "INSERT INTO SHINHAN_DATA ( IDX_SHINHANDATA, REC_DATA, REG_DT)VALUES( IDX_SHINHANDATA_SEQ.NEXTVAL, ?, TO_DATE(?,'YYYY.MM.DD hh24:mi'))";
+        String a = LocalDateTime.now().toString().replace("T", " ").substring(0,19);
+        String query = "INSERT INTO SHINHAN_DATA ( IDX_SHINHANDATA, REC_DATA, REG_DT)VALUES( IDX_SHINHANDATA_SEQ.NEXTVAL, ?, TO_DATE(?,'YYYY-MM-DD hh24:mi:ss'))";
 //        String[] dataArr = message.split("\\|");
 //        for(int a = 1; a < dataArr.length - 1; a++){
 //            String[] dataObject = dataArr[a].split("=");
@@ -52,7 +50,7 @@ public class EchoServerHandler extends ChannelInboundHandlerAdapter {
                         conn = DbConnection.getConnection();
                         pstm = conn.prepareStatement(query);
                         pstm.setString(1, messageArr[i]);
-                        pstm.setString(2, a[0] + " " + a[1]);
+                        pstm.setString(2, a);
 
                         pstm.executeUpdate();
                     } catch (SQLException e) {
@@ -71,7 +69,7 @@ public class EchoServerHandler extends ChannelInboundHandlerAdapter {
                 conn = DbConnection.getConnection();
                 pstm = conn.prepareStatement(query);
                 pstm.setString(1, message);
-                pstm.setString(2, a[0] + " " + a[1]);
+                pstm.setString(2, a);
 
                 pstm.executeUpdate();
                 channel.writeAndFlush("데이터 입력이 완료되었습니다.");
