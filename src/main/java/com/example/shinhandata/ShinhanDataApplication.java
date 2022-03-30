@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 @SpringBootApplication
 public class ShinhanDataApplication {
 
-    private static final int SERVER_PORT = 8086;
+    private static final int SERVER_PORT = 29200;
     private final ChannelGroup allChannels = new DefaultChannelGroup("server", GlobalEventExecutor.INSTANCE);
     private EventLoopGroup bossEventLoopGroup;
     private EventLoopGroup workerEventLoopGroup;
