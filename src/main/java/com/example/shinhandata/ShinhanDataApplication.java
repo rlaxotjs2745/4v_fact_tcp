@@ -37,7 +37,6 @@ public class ShinhanDataApplication {
         bootstrap.channel(NioServerSocketChannel.class);
         bootstrap.childOption(ChannelOption.TCP_NODELAY, true);
         bootstrap.childOption(ChannelOption.SO_KEEPALIVE, true);
-
         bootstrap.childHandler(new EchoServerInitializer());
 
         try{
