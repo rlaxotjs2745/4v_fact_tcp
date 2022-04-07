@@ -10,13 +10,13 @@ public class DbConnection {
     public static Connection getConnection() {
         Connection connect = null;
         try{
-//            String user = "c##fact_usr";
-//            String pw = "pass";
-//            String url = "jdbc:oracle:thin:@192.168.0.97:1521:orcl";
-
-            String user = "fact_user";
-            String pw = "fact1230";
-            String url = "jdbc:tibero:thin:@192.168.50.13:8629:SFINNOV";
+            String user = "c##fact_usr";
+            String pw = "pass";
+            String url = "jdbc:oracle:thin:@192.168.0.97:1521:orcl";
+//
+//            String user = "fact_user";
+//            String pw = "fact1230";
+//            String url = "jdbc:tibero:thin:@192.168.50.13:8629:SFINNOV";
 
             Class.forName("oracle.jdbc.driver.OracleDriver");
             connect = DriverManager.getConnection(url, user, pw);
