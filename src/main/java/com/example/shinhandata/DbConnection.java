@@ -9,7 +9,6 @@ public class DbConnection {
 
     public static Connection getConnection() {
         Connection connect = null;
-        try{
 ////            dev
 //            String user = "c##fact_usr";
 //            String pw = "pass";
@@ -24,11 +23,10 @@ public class DbConnection {
 //            String user = "fact_user";
 //            String pw = "fact1230";
 //            String url = "jdbc:tibero:thin:@192.168.51.13:8629:SFINNOV";
-
+        try{
 //            Class.forName("oracle.jdbc.driver.OracleDriver");
             Class.forName("com.tmax.tibero.jdbc.TbDriver");
 
-            System.out.println("gdgd");
             connect = DriverManager.getConnection(url, user, pw);
         } catch (ClassNotFoundException e){
             System.out.println("드라이버 실패 : " + e.toString());
