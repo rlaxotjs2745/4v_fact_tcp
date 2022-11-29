@@ -1,18 +1,21 @@
 package com.example.shinhandata;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+@Slf4j
 public class DbConnection {
     public static Connection connection;
 
     public static Connection getConnection() {
         Connection connect = null;
 ////            dev
-//            String user = "c##fact_usr";
-//            String pw = "pass";
-//            String url = "jdbc:oracle:thin:@192.168.0.97:1521:orcl";
+/*            String user = "c##fact_usr";
+            String pw = "pass";
+            String url = "jdbc:oracle:thin:@192.168.0.97:1521:orcl";*/
 
 //          상주
             String user = "fact_user";
@@ -29,9 +32,9 @@ public class DbConnection {
 
             connect = DriverManager.getConnection(url, user, pw);
         } catch (ClassNotFoundException e){
-            System.out.println("드라이버 실패 : " + e.toString());
+            log.error("드라이버 실패 : " + e.toString());
         } catch (SQLException e){
-            System.out.println("DB 연결 실패 : " + e.toString());
+            log.error("DB 연결 실패 : " + e.toString());
         }
         return connect;
     }

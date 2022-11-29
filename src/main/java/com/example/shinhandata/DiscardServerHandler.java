@@ -1,14 +1,11 @@
 package com.example.shinhandata;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.LoggerFactory;
 
-
-import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,7 +15,7 @@ import java.util.ArrayList;
 import java.util.logging.Logger;
 
 @Slf4j
-public class EchoServerHandler extends ChannelInboundHandlerAdapter {
+public class DiscardServerHandler extends ChannelInboundHandlerAdapter {
 
     Connection conn = null;
     PreparedStatement pstm = null;
@@ -26,23 +23,15 @@ public class EchoServerHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext context, Object msg){
-        boolean splitBool = false;
-        //ByteBuf readMessage = (ByteBuf) msg;
-        //String message = msg.toString(StandardCharsets.US_ASCII);
-        String message = (String)msg;
-        //System.out.println(message);
-        if(message.contains("\\n")){
-            splitBool = true;
-            message = message.replaceAll("\\\\n", ""); //clrf처리, 오류 시 \두개 뺄 것
-        }
-        if(message.contains("\\r")){
-            splitBool = true;
-            message = message.replaceAll("\\\\r", "");// clrf처리, 오류 시 \두개 뺄 것
-        }
+        //boolean splitBool = false;
 
-        Channel channel = context.channel();
+        String message = (String)msg;
+        message+="$!";
+
         String date = LocalDateTime.now().toString().replace("T", " ").substring(0,19);
+
         String query = "INSERT INTO SHINHAN_DATA ( IDX_SHINHANDATA, REC_DATA, REG_DT) VALUES ( IDX_SHINHANDATA_SEQ.NEXTVAL, ?, TO_DATE(?,'YYYY-MM-DD hh24:mi:ss'))";
+
         int startNum = 0;
         ArrayList<String> messageArr = new ArrayList<>();
         for(int i = 0; i < message.length(); i++){
@@ -51,7 +40,7 @@ public class EchoServerHandler extends ChannelInboundHandlerAdapter {
             }
             if(i > 3 && message.substring(i - 1, i+1).equals("$!")){
                 messageArr.add(message.substring(startNum, i + 1));
-                splitBool = true;
+                //splitBool = true;
             }
         }
 
@@ -87,11 +76,12 @@ public class EchoServerHandler extends ChannelInboundHandlerAdapter {
                 pstm.setString(2, date);
                 pstm.executeUpdate();
 
+                log.info("db input success!:"+ message);
+
             }catch (SQLException e) {
-                log.error("SQLException:" + e.toString());
+                log.error("db input fail!:" + e.toString());
             }
         }
-
     }
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
