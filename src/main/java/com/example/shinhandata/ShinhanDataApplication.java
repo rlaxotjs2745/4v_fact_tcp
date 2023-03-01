@@ -9,14 +9,11 @@ import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import io.netty.util.concurrent.DefaultThreadFactory;
 import io.netty.util.concurrent.GlobalEventExecutor;
 
 import java.net.InetSocketAddress;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 
 @SpringBootApplication
@@ -28,6 +25,7 @@ public class ShinhanDataApplication {
     private EventLoopGroup workerEventLoopGroup;
 
     public void startServer(){
+
         bossEventLoopGroup = new NioEventLoopGroup(1, new DefaultThreadFactory("boss"));
         workerEventLoopGroup = new NioEventLoopGroup(1, new DefaultThreadFactory("worker"));
 
@@ -37,8 +35,11 @@ public class ShinhanDataApplication {
 
         bootstrap.channel(NioServerSocketChannel.class);
         bootstrap.childOption(ChannelOption.TCP_NODELAY, true);
+        bootstrap.childOption(ChannelOption.SO_LINGER, 0);
+        bootstrap.childOption(ChannelOption.SO_BACKLOG, 1024);
         bootstrap.childOption(ChannelOption.SO_KEEPALIVE, true);
-        bootstrap.childHandler(new EchoServerInitializer());
+
+        bootstrap.childHandler(new EnvServerInitializer());
 
         try{
             ChannelFuture bindFuture = bootstrap.bind(new InetSocketAddress(SERVER_PORT)).sync();

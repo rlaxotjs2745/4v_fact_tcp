@@ -7,7 +7,6 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.LoggerFactory;
 
-
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -24,6 +23,9 @@ public class EchoServerHandler extends ChannelInboundHandlerAdapter {
     PreparedStatement pstm = null;
     ResultSet rs = null;
 
+    public EchoServerHandler(Connection _conn){
+        conn = _conn;
+    }
     @Override
     public void channelRead(ChannelHandlerContext context, Object msg){
         boolean splitBool = false;
@@ -78,7 +80,7 @@ public class EchoServerHandler extends ChannelInboundHandlerAdapter {
             String newQuery = "INSERT INTO TB_ENV_DATA ( IDX_TB_ENV_DATA, " + keys + ") VALUES ( TB_ENV_DATA_SEQ.NEXTVAL, " + values + ")";
 
             try {
-                conn = DbConnection.getConnection();
+                //conn = DbConnection.getConnection();
                 pstm = conn.prepareStatement(newQuery);
                 pstm.executeUpdate();
 
@@ -91,7 +93,6 @@ public class EchoServerHandler extends ChannelInboundHandlerAdapter {
                 log.error("SQLException:" + e.toString());
             }
         }
-
     }
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {

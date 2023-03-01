@@ -1,32 +1,34 @@
 package com.example.shinhandata;
 
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.LoggerFactory;
+import org.h2.jdbcx.JdbcConnectionPool;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.logging.Logger;
 
 @Slf4j
-public class DiscardServerHandler extends ChannelInboundHandlerAdapter {
+public class EnvServerHandler extends ChannelInboundHandlerAdapter {
 
     Connection conn = null;
     PreparedStatement pstm = null;
     ResultSet rs = null;
 
+    public EnvServerHandler(Connection _conn){
+        conn = _conn;
+    }
     @Override
     public void channelRead(ChannelHandlerContext context, Object msg){
         //boolean splitBool = false;
 
         String message = (String)msg;
-        message+="$!";
+        message+="$!";//델리미터 필터에서 제거해서 올라와서 다시 넣음
 
         String date = LocalDateTime.now().toString().replace("T", " ").substring(0,19);
 
@@ -46,6 +48,8 @@ public class DiscardServerHandler extends ChannelInboundHandlerAdapter {
 
         String keys = "";
         String values = "";
+
+        //for (int i = 0; i < 1; i++) {//하나만 넣자.. 쌓인거 다 넣으니까.. 문제가 되네.
         for (int i = 0; i < messageArr.size(); i++) {
             keys = "";
             values = "";
@@ -55,9 +59,13 @@ public class DiscardServerHandler extends ChannelInboundHandlerAdapter {
                 if (a == 1 || a == 2) {
                     keys += dataObject[0] + ", ";
                     values += "\'" + dataObject[1] + "\', ";
+
+
                 } else if (dataObject.length == 2) {
                     keys += dataObject[0] + ", ";
                     values += dataObject[1] + ", ";
+
+
 
                 }
             }
@@ -67,7 +75,6 @@ public class DiscardServerHandler extends ChannelInboundHandlerAdapter {
             String newQuery = "INSERT INTO TB_ENV_DATA ( IDX_TB_ENV_DATA, " + keys + ") VALUES ( TB_ENV_DATA_SEQ.NEXTVAL, " + values + ")";
 
             try {
-                conn = DbConnection.getConnection();
                 pstm = conn.prepareStatement(newQuery);
                 pstm.executeUpdate();
 
@@ -76,7 +83,7 @@ public class DiscardServerHandler extends ChannelInboundHandlerAdapter {
                 pstm.setString(2, date);
                 pstm.executeUpdate();
 
-                log.info("db input success!:"+ message);
+                log.info("db input success!:"+ date + "   :"+ message.substring(message.length()-32,message.length()-20));
 
             }catch (SQLException e) {
                 log.error("db input fail!:" + e.toString());

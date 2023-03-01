@@ -8,16 +8,13 @@ import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.handler.codec.DelimiterBasedFrameDecoder;
-import io.netty.handler.codec.LineBasedFrameDecoder;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
-import io.netty.handler.logging.LogLevel;
-import io.netty.handler.logging.LoggingHandler;
 import io.netty.util.CharsetUtil;
 
 import java.util.List;
 
-public class EchoServerInitializer extends ChannelInitializer<SocketChannel> {
+public class EnvServerInitializer extends ChannelInitializer<SocketChannel> {
 
     @Override
     protected void initChannel(SocketChannel channel) throws Exception {
@@ -38,7 +35,11 @@ public class EchoServerInitializer extends ChannelInitializer<SocketChannel> {
         //pipeline.addLast(new LineBasedFrameDecoder(4096));
         pipeline.addLast(new StringDecoder());
         pipeline.addLast(new StringEncoder(CharsetUtil.UTF_8));
-        pipeline.addLast(new DiscardServerHandler());
+
+        DbConnection dbConnection = new DbConnection();
+
+
+        pipeline.addLast(new EnvServerHandler(dbConnection.getConnection()));
 
 
     }
